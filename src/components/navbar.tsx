@@ -14,33 +14,47 @@ const Navbar = async () => {
           <ul className="hidden md:flex items-center gap-4 mr-5 font-semibold text-gray-600 hover:text-gray-800">
             <li>
               <Link href="/">Home</Link>
-              <Link href="/product">Product</Link>
-              <Link href="/dashboard">Dashboard</Link>
-              <Link href="/user">User</Link>
             </li>
+            {session && (
+              <>
+                <li>
+                  <Link href="/product">Product</Link>
+                </li>
+                <li>
+                  <Link href="/dashboard">Dashboard</Link>
+                </li>
+                {session.user.role === "admin" ? (
+                  <li>
+                    <Link href="/user">Users</Link>
+                  </li>
+                ) : null}
+              </>
+            )}
           </ul>
-          <div className="flex gap-3 items-center">
-            <div className="flex flex-col justify-center -space-y-1">
-              <span className="font-semibold text-gray-600 text-right capitalize">
-                username
-              </span>
-              <span className="font-semibold text-gray-400 text-right capitalize">
-                admin
-              </span>
+          {session && (
+            <div className="flex gap-3 items-center">
+              <div className="flex flex-col justify-center -space-y-1">
+                <span className="font-semibold text-gray-600 text-right capitalize">
+                  {session.user.name}
+                </span>
+                <span className="font-semibold text-gray-400 text-right capitalize">
+                  {session.user.role}
+                </span>
+              </div>
+              <button
+                type="button"
+                className="text-sm ring-2 bg-gray-100 rounded-full"
+              >
+                <Image
+                  src={session.user.image || "/avatar.svg"}
+                  alt="avatar"
+                  width={64}
+                  height={64}
+                  className="w-8 h-8 rounded-full"
+                />
+              </button>
             </div>
-            <button
-              type="button"
-              className="text-sm ring-2 bg-gray-100 rounded-full"
-            >
-              <Image
-                src={session?.user.image || "/avatar.svg"}
-                alt="avatar"
-                width={64}
-                height={64}
-                className="w-8 h-8 rounded-full"
-              />
-            </button>
-          </div>
+          )}
           {session ? (
             <form
               action={async () => {
